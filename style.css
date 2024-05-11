@@ -78,7 +78,7 @@ ul li{
     justify-content: space-between;
     position: relative;
     transition: 0.5s;
-   cursor: pointer;
+    cursor: pointer;
 
 }
 ul li::before{
