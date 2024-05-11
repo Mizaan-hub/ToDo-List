@@ -1,76 +1,39 @@
-let items = [];
+const inputBox = document.getElementById("inputBox");
+    const listContainer = document.getElementById("list-container");
 
-const itemsDiv = document.getElementById("items")
-const input = document.getElementById("itemInput")
-const storageKey = "items";
-
-function renderItems() {
-    itemsDiv.innerHTML = null;
-
-    for (const [idx, item] of Object.entries(items)) {
-        const container = document.createElement("div")
-        container.style.marginBottom = "10px"
-        container.style.display = "flex"
-        container.style.justifyContent = "center"
-        container.style.alignItems = "center"
-        
-        const text = document.createElement("p")
-        text.style.display = "inline"
-        text.style.marginRight = "10px"
-        text.textContent = item;
-        text.style.color = "white"
-        text.prepend(">      ")
-
-        const button = document.createElement("button")
-        button.onclick = () => removeItem(idx)
-        button.textContent = "Delete"
-        button.style.display = "none"; // Hide the button by default
-
-        container.addEventListener("mouseover", () => {
-          button.style.display = "block"; // Show the button when hovering over the text
-        });
-    
-        container.addEventListener("mouseout", () => {
-          button.style.display = "none"; // Hide the button when not hovering over the text
-        });
-    
-        
-
-        container.appendChild(text)
-        container.appendChild(button)
-        
-        itemsDiv.appendChild(container)
+    function addTask(){
+        if(inputBox.value === ""){
+            alert("Your must add some task!");
+        }
+        else{
+            let li = document.createElement("li");
+            li.innerHTML = inputBox.value;
+            listContainer.appendChild(li);
+ 
+            let span = document.createElement("span")
+            span.innerHTML = "\u00d7";
+            li.appendChild(span);
+        }
+        inputBox.value = ""
+        saveData();
     }
-}
 
-function loadItems() {
-    const oldItems = localStorage.getItem(storageKey)
-    if (oldItems) items = JSON.parse(oldItems)
-    renderItems()
-}
+    listContainer.addEventListener("click",function(e){
+        if(e.target.tagName === "LI"){
+            e.target.classList.toggle("checked");
+            saveData();
+        } 
+        else if(e.target.tagName === "SPAN"){
+            e.target.parentElement.remove();
+            saveData();
+        }
+    }, false);
 
-function saveItems() {
-    const stringItems = JSON.stringify(items);
-    localStorage.setItem(storageKey, stringItems)
-}
-
-
-function addItem() {
-    const value = input.value;
-    if (!value) {
-        alert("You cannot add an empty item")
-        return
+    function saveData(){
+        localStorage.setItem("data",listContainer.innerHTML);
     }
-    items.push(value)
-    renderItems()
-    input.value = ""
-    saveItems()
-}
 
-function removeItem(idx) {
-    items.splice(idx, 1)
-    renderItems()
-    saveItems()
-}
-
-document.addEventListener("DOMContentLoaded", loadItems)
+    function showData(){
+        listContainer.innerHTML = localStorage.getItem("data");
+    }
+    showData();
