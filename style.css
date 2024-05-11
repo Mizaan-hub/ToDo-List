@@ -67,6 +67,7 @@ button:hover{
     background-color: #11e534c2;
 }
 ul li{
+    text-wrap: wrap;
     list-style: none;
     background: transparent;
     padding: 15px 44px;
